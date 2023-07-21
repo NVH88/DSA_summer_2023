@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(mask, i) ((mask >> i) & 1)
+int n, c[16][16], f[1 << 16][16];
+
+int main() {
+	ios_base::sync_with_stdio(); cin.tie(0); cout.tie(0);
+	cin >> n;
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < n; ++j) {
+			cin >> c[i][j];
+		}
+	}
+	for(int mask = 0; mask < (1 << n); ++mask) {
+		if(__builtin_popcount(mask) == 1) continue;
+		for(int i = 0; i < n; ++i) {
+			f[mask][i] = 1e9;
+			if(bit(mask, i)) {
+				int pre_mask = mask - (1 << i);
+				for(int j = 0; j < n; ++j) {
+					if(bit(pre_mask, j)) f[mask][i] = min(f[mask][i], f[pre_mask][j] + c[j][i]);
+				}
+			}
+		}
+	}
+	int ans = INT_MAX;
+	for(int i = 0; i < n; ++i) ans = min(ans, f[(1 << n) - 1][i]);
+	cout << ans;
+}
