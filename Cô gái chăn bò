@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(mask, i) ((mask >> i) & 1)
+
+bool check(int x, int y, int n) {
+	for(int i = 0; i < n - 1; ++i) {
+		if(bit(x, i) && bit(x, i + 1) && bit(y, i) && bit(y, i + 1)) return false;
+		if(!bit(x, i) && !bit(x, i + 1) && !bit(y, i) && !bit(y, i + 1)) return false;
+	}
+	return true;
+}
+
+int main() {
+	ios_base::sync_with_stdio(); cin.tie(0); cout.tie(0);
+	int t; cin >> t;
+	while(t--) {
+		int n, m;
+		cin >> n >> m;
+		if(m < n) swap(n, m);
+		int f[1 << n][m];
+		for(int i = 0; i < 1 << n; ++i) f[i][0] = 1;
+		for(int i = 1; i < m; ++i) {
+			for(int mask = 0; mask < 1 << n; ++mask) {
+				f[mask][i] = 0;
+ 				for(int pre_mask = 0; pre_mask < 1 << n; ++pre_mask) {
+					if(check(mask, pre_mask, n)) f[mask][i] += f[pre_mask][i - 1];
+				}
+			}
+		}
+		int ans = 0;
+		for(int i = 0; i < 1 << n; ++i) ans += f[i][m - 1];
+		cout << ans << endl;
+	}
+}
