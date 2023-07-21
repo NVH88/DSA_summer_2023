@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int n; cin >> n;
+	int a[4][n], d[16], dp[n][16], sum[n][16], ans = -1e9;
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < n; ++j) {
+			cin >> a[i][j];
+			ans = max(ans, a[i][j]);
+		}
+	}
+	if(ans < 0) {
+		cout << ans; 
+		return 0;
+	}
+	for(int i = 0; i < 16; ++i) {
+		d[i] = 1;
+		for(int j = 0; j < 3; ++j) {
+			if((i >> j) & 1 && (i >> j + 1) & 1) d[i] = 0;
+		}
+	}
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < 16; ++j) {
+			dp[i][j] = 0; sum[i][j] = 0;
+			if(d[j]) {
+				for(int k = 0; k < 4; ++k) {
+					if((j >> k) & 1) sum[i][j] += a[k][i];
+				}
+			}
+		}
+	}
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < 16; ++j) {
+			if(i == 0) {
+				dp[i][j] = sum[i][j];
+				ans = max(ans, dp[i][j]);
+			}
+			else {
+				if(d[j]) {
+					dp[i][j] = sum[i][j];
+					for(int k = 0; k < 16; ++k) {
+						if(d[k]) {
+							if(!(j & k))dp[i][j] = max(dp[i][j], dp[i - 1][k] + sum[i][j]);
+							ans = max(ans, dp[i][j]);
+						}
+					}
+				}
+			}
+		}
+	}
+	cout << ans;
+}
