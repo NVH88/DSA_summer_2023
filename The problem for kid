@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(mask, i) ((mask >> i) & 1)
+
+int n, a[20][20], f[1 << 20];
+long long c[1 << 20];
+
+int main() {
+	ios_base::sync_with_stdio(); cin.tie(0); cout.tie(0);
+	cin >> n;
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < n; ++j) {
+			cin >> a[i][j];
+		}
+	}
+	c[0] = 1;
+	for(int mask = 1; mask < 1 << n; ++mask) {
+		int k = __builtin_popcount(mask);
+		for(int i = 0; i < n; ++i) {
+			if(bit(mask, i)) {
+				int pre_mask = mask - (1 << i);
+//				f[mask] = max(f[mask], f[pre_mask] + a[k - 1][i]);
+				if(f[mask] < f[pre_mask] + a[k - 1][i]) {
+					f[mask] = f[pre_mask] + a[k - 1][i];
+					c[mask] = c[pre_mask];
+				}
+				else if(f[mask] == f[pre_mask] + a[k - 1][i]) c[mask] += c[pre_mask];
+			}
+		}
+	}
+	cout << f[(1 << n) - 1] << " " << c[(1 << n) - 1];
+}
