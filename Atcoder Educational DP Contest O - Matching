@@ -1,0 +1,70 @@
+//cach 1
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(mask, i) ((mask >> i) & 1)
+
+const int M = 1e9 + 7;
+int n, a[21][21], f[1 << 21];
+
+int main() {
+	ios_base::sync_with_stdio(); cin.tie(0); cout.tie(0);
+	cin >> n;
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < n; ++j) {
+			cin >> a[i][j];
+		}
+	}
+	f[0] = 1;
+	for(int mask = 1; mask < 1 << n; ++mask) {
+		int k = __builtin_popcount(mask) - 1;
+		for(int i = 0; i < n; ++i) {
+			if(bit(mask, i) && a[k][i]) {
+				f[mask] = (f[mask] % M + f[mask - (1 << i)] % M) % M; 
+			}
+		}
+	}
+	cout << f[(1 << n) - 1];
+}
+
+
+
+//cach 2
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX_N = 21;
+
+bool compat[MAX_N][MAX_N];
+int dp[1 << MAX_N];
+
+int main() {
+    int N;
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            cin >> compat[i][j];
+        }
+    }
+
+    dp[0] = 1;
+
+    for (int s = 0; s < (1 << N); s++) {
+        int pair_num = __builtin_popcount(s); // the number of 1-bit in number s
+        for (int w = 0; w < N; w++) {
+            /*
+             * check that
+             * 1. this woman hasn't been paired already
+             * 2. she's also compatible with the {pair_num + 1}th man
+             */
+            if ((s & (1 << w)) || !compat[pair_num][w])
+                continue;
+
+            // add the amount to future dp states
+            dp[s | (1 << w)] += dp[s];
+            dp[s | (1 << w)] %= MOD;
+        }
+    }
+	cout << dp[(1 << N) - 1];
+}
