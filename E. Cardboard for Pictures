@@ -1,0 +1,32 @@
+// Bài này chỉ hay ở chỗ xử lí tràn
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll unsigned long long
+
+ll n, area, a[200005]; 
+
+ll bs(ll l, ll r) {
+	while(l <= r) {
+		ll m = (l + r) / 2, s = 0;
+		for(int i = 0; i < n; ++i) {
+			if(ULLONG_MAX / (a[i] + m * 2) < (a[i] + m * 2) || ULLONG_MAX - s < (a[i] + m * 2) * (a[i] + m * 2)) {
+				s = ULLONG_MAX; break;
+			}
+			s += (a[i] + m * 2) * (a[i] + m * 2);
+		}
+		if(s == area) return m;
+		else if(s > area) r = m - 1;
+		else l = m + 1;
+	}
+	return -1;
+}
+
+int main() {
+	int t; cin >> t;
+	while(t--) {
+		cin >> n >> area;
+		for(int i = 0; i < n; ++i) cin >> a[i];
+		cout << bs(0, area) << endl;
+	}
+}
