@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(n, i) ((n >> i) & 1)
+int k, r, m, n, ans, cnt[100];
+pair<int, int> c[20];
+pair<int, int> p[100];
+bitset<100> bits;
+vector<int> v[20];
+
+double calc(pair<int, int> x, pair<int, int> y) {
+	return sqrt((double)(x.first - y.first) * (x.first - y.first) + (x.second - y.second) * (x.second - y.second));
+}
+
+void solve() {
+	for(int i = 0; i < m; ++i) {
+		for(int j = 0; j < n; ++j) {
+			if(calc(c[i], p[j]) <= r) v[i].push_back(j);
+		}
+	}
+}
+
+int main() {
+	cin >> k >> r >> m;
+	for(int i = 0; i < m; ++i) cin >> c[i].first >> c[i].second;
+	cin >> n;
+	for(int i = 0; i < n; ++i) cin >> p[i].first >> p[i].second >> cnt[i];
+	solve();
+	
+	for(int mask = 0; mask < 1 << m; ++mask) {
+		if(__builtin_popcount(mask) > k) continue;
+		for(int i = 0; i < m; ++i) {
+			if(bit(mask, i)) {
+				for(int j : v[i]) bits.set(j);
+			}
+		}
+		int sum = 0;
+		for(int i = 0; i < n; ++i) {
+			sum += bits.test(i) * cnt[i];
+		}
+		ans = max(ans, sum);
+		bits.reset();
+	}
+	cout << ans;
+}
