@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+string s;
+struct Node {
+	int pair, open, close;
+	
+	Node(){};
+	
+	Node(int p, int o, int c) {
+		pair = p; open = o; close = c;
+	}
+} nodes[4000005];
+
+Node operator + (const Node& left, const Node& right) {
+	int tmp = min(left.open, right.close);
+	return Node(left.pair + right.pair + tmp * 2, left.open + right.open - tmp, left.close + right.close - tmp);
+}
+
+void build(int id, int l, int r) {
+	if(l == r) {
+		if(s[l - 1] == '(') nodes[id] = Node(0, 1, 0);
+		else nodes[id] = Node(0, 0, 1);
+		return;
+	}
+
+	int m = (l + r) / 2;
+	build(2 * id, l, m); build(2 * id + 1, m + 1, r);
+	nodes[id] = nodes[2 * id] + nodes[2 * id + 1];
+}
+
+Node count(int id, int tl, int tr, int l, int r) {
+	if(l > tr || r < tl) return Node(0, 0, 0);
+
+	if(l <= tl && r >= tr) {
+		return nodes[id];
+	}
+
+	int tm = (tl + tr) / 2;
+	return count(2 * id, tl, tm, l, r) + count(2 * id + 1, tm + 1, tr, l, r);
+}
+
+int main() {
+	cin >> s;
+	int n = s.length(), q; cin >> q;
+	build(1, 1, n);
+	while(q--) {
+		int l, r; cin >> l >> r;
+		cout << count(1, 1, n, l, r).pair << endl;
+	}	
+}
