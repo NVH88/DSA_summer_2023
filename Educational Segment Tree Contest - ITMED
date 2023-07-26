@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+ll n, k, a[100001], f[100001], ans = 0, ko = 0;
+deque<ll> q;
+map<ll, int> mp;
+
+int main() {
+    cin >> n >> k;
+    for(int i = 1; i <= n; ++i) cin >> a[i];
+    for(int i = n; i >= 1; --i) {
+        if(i >= n - k) {
+            if(!mp.size()) f[i] = a[i];
+            else f[i] = a[i] + max(mp.rbegin()->first, ko);
+            q.push_front(f[i]);
+            ++mp[f[i]];
+            ans = max(ans, f[i]);
+        }
+        else {
+            --mp[q.back()];
+            if(!mp[q.back()]) mp.erase(q.back());
+            q.pop_back();
+            f[i] = max(mp.rbegin()->first, ko) + a[i]; 
+            ans = max(ans, f[i]);
+            q.push_front(f[i]);
+            ++mp[f[i]];
+        }
+    }
+    cout << ans;
+}
