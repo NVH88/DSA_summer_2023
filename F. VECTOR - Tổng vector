@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, u, v, m, ans;
+pair<int, int> a[30];
+map<pair<int, int>, int> mp1, mp2;
+
+void back1(int i, pair<int, int> p) {
+    for(int j = 0; j <= 1; ++j) {
+        if(j) p.first += a[i].first, p.second += a[i].second;
+        if(i == m - 1) ++mp1[p];
+        else back1(i + 1, p);
+    }
+}
+
+void back2(int i, pair<int, int> p) {
+    for(int j = 0; j <= 1; ++j) {
+        if(j) p.first += a[i].first, p.second += a[i].second;
+        if(i == n - 1) ++mp2[p];
+        else back2(i + 1, p);
+    }
+}
+
+int main() {
+    cin >> n; m = n / 2;
+    for(int i = 0; i < n; ++i) cin >> a[i].first >> a[i].second;
+    cin >> u >> v;
+    pair<int, int> p1 = {0, 0}, p2 = {0, 0};
+    back1(0, p1);
+    back2(m, p1);
+    mp2[{0, 0}] = max(mp2[{0, 0}], 1);
+    for(auto it : mp1) {
+        pair<int, int> p = it.first;
+        ans += mp1[p] * mp2[{u - p.first, v - p.second}];
+    }
+    cout << ans;
+}
