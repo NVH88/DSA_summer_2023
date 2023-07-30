@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = 200001;
+int n, m, a[maxN];
+
+struct Node{
+    long long ans, sum, pre, sub;
+} t[4 * maxN];
+
+void build(int id, int l, int r) {
+    if(l == r) {
+        t[id].ans = max(0, a[l]); t[id].sum = a[l]; t[id].pre = a[l]; t[id].sub = a[l];
+        return;
+    }
+
+    int m = (l + r) / 2;
+    build(id * 2, l, m); build(id * 2 + 1, m + 1, r);
+    t[id].ans = max({t[id * 2].ans, t[id * 2 + 1].ans, t[id * 2].sub + t[id * 2 + 1].pre});
+    t[id].sum = t[id * 2].sum + t[id * 2 + 1].sum;
+    t[id].pre = max(t[2 * id].pre, t[2 * id].sum + t[2 * id + 1].pre);
+    t[id].sub = max(t[2 * id + 1].sub, t[2 * id + 1].sum + t[2 * id].sub);
+}
+
+void update(int id, int l, int r, int k, int x) {
+    if(l > k || r < k) return;
+    if(l == r) {
+        t[id].ans = max(x, 0); t[id].sum = x; t[id].pre = x; t[id].sub = x;
+        return;
+    }
+
+    int m = (l + r) / 2;
+    update(id * 2, l, m, k, x); update(id * 2 + 1, m + 1, r, k, x);
+    t[id].ans = max({t[id * 2].ans, t[id * 2 + 1].ans, t[id * 2].sub + t[id * 2 + 1].pre});
+    t[id].sum = t[id * 2].sum + t[id * 2 + 1].sum;
+    t[id].pre = max(t[2 * id].pre, t[2 * id].sum + t[2 * id + 1].pre);
+    t[id].sub = max(t[2 * id + 1].sub, t[2 * id + 1].sum + t[2 * id].sub);
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> n >> m;
+    for(int i = 1; i <= n; ++i) cin >> a[i];
+    build(1, 1, n);
+    while(m--) {
+        int k, x; cin >> k >> x;
+        update(1, 1, n, k, x);
+        cout << t[1].ans << endl;
+    }
+}
