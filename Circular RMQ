@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = 200001;
+long long n, m, a[maxN];
+
+struct Node{
+    long long val, lazy;
+} t[4 * maxN];
+
+void down(int id) {
+    int x = t[id].lazy; t[id].lazy = 0;
+    t[2 * id].val += x; t[2 * id].lazy += x;
+    t[2 * id + 1].val += x; t[2 * id + 1].lazy += x;
+    return;
+}
+
+void build(int id, int l, int r) {
+    if(l == r) {
+        t[id].val = a[l]; return;
+    }
+
+    int m = (l + r) / 2;
+    build(2 * id, l, m); build(2 * id + 1, m + 1, r);
+    t[id].val = min(t[2 * id].val, t[2 * id + 1].val);
+}
+
+void update(int id, int tl, int tr, int l, int r, long long v) {
+    if(l > tr || r < tl) return;
+    if(l <= tl && tr <= r) {
+        t[id].val += v; t[id].lazy += v;
+        return;
+    }
+
+    down(id);
+    int tm = (tl + tr) / 2;
+    update(2 * id, tl, tm, l, r, v); update(2 * id + 1, tm + 1, tr, l, r, v);
+    t[id].val = min(t[2 * id].val, t[2 * id + 1].val);
+}
+
+long long get(int id, int tl, int tr, int l, int r) {
+    if(tl > r || tr < l) return INT_MAX;
+    if(tl >= l && tr <= r) return t[id].val;
+
+    down(id);
+    int tm = (tl + tr) / 2;
+    return min(get(2 * id, tl, tm, l, r), get(2 * id + 1, tm + 1, tr, l, r));
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> n;
+    for(int i = 1; i <= n; ++i) cin >> a[i];
+    build(1, 1, n);
+    cin >> m;
+    cin.ignore();
+    while(m--) {
+        string s, tmp; getline(cin, s);
+        stringstream ss(s);
+        int l, r, v, cnt = 0;
+        while(ss >> tmp) {
+            if(cnt == 0) l = stoi(tmp);
+            else if(cnt == 1) r = stoi(tmp);
+            else if(cnt == 2) v = stoll(tmp);
+            ++cnt; 
+        }
+        ++l; ++r;
+        if(cnt == 3) {
+            if(l > r) {
+                update(1, 1, n, 1, r, v);
+                update(1, 1, n, l, n, v);
+            }
+            else update(1, 1, n, l, r, v);
+        }
+        else {
+            if(l > r) {
+                cout << min(get(1, 1, n, 1, r), get(1, 1, n, l, n)) << endl;
+            }
+            else cout << get(1, 1, n, l, r) << endl;
+        }
+    }
+}
