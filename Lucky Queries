@@ -13,7 +13,7 @@ void down(int id) {
     t[2 * id + 1].lazy += t[id].lazy;
     if(t[id].lazy % 2) {
         swap(t[2 * id].tang, t[2 * id].giam); swap(t[2 * id].cnt4, t[2 * id].cnt7);
-        swap(t[2 * id + 1].tang, t[2 * id + 1].giam), swap(t[2 * id + 1].cnt4, t[2 * id + 1].cnt7);
+        swap(t[2 * id + 1].tang, t[2 * id + 1].giam); swap(t[2 * id + 1].cnt4, t[2 * id + 1].cnt7);
     }
     t[id].lazy = 0;
 }
