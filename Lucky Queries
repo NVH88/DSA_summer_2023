@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
+const int maxN = 1000001;
+int n, m, a[maxN];
+ 
+struct Node{
+    int tang, giam, cnt4, cnt7, lazy;
+} t[4 * maxN];
+ 
+void down(int id) {
+    t[2 * id].lazy += t[id].lazy; 
+    t[2 * id + 1].lazy += t[id].lazy;
+    if(t[id].lazy % 2) {
+        swap(t[2 * id].tang, t[2 * id].giam); swap(t[2 * id].cnt4, t[2 * id].cnt7);
+        swap(t[2 * id + 1].tang, t[2 * id + 1].giam), swap(t[2 * id + 1].cnt4, t[2 * id + 1].cnt7);
+    }
+    t[id].lazy = 0;
+}
+ 
+void build(int id, int l, int r) {
+    if(l == r) {
+        if(a[l] == 4){
+            t[id].tang = 1; t[id].giam = 1; t[id].cnt4 = 1; t[id].cnt7 = 0; t[id].lazy = 0;
+        }
+        else {
+            t[id].tang = 1; t[id].giam = 1; t[id].cnt4 = 0; t[id].cnt7 = 1; t[id].lazy = 0;
+        }
+        return;
+    }
+ 
+    int m = (l + r) / 2;
+    build(2 * id, l, m); build(2 * id + 1, m + 1, r);
+    t[id].tang = max(t[2 * id].tang + t[2 * id + 1].cnt7, t[2 * id].cnt4 + t[2 * id + 1].tang);
+    t[id].giam = max(t[2 * id].giam + t[2 * id + 1].cnt4, t[2 * id].cnt7 + t[2 * id + 1].giam);
+    t[id].cnt4 = t[2 * id].cnt4 + t[2 * id + 1].cnt4;
+    t[id].cnt7 = t[2 * id].cnt7 + t[2 * id + 1].cnt7;
+}
+ 
+void update(int id, int tl, int tr, int l, int r) {
+    if(l > tr || r < tl) return;
+    if(tl >= l && tr <= r) {
+        ++t[id].lazy;
+        swap(t[id].tang, t[id].giam); swap(t[id].cnt4, t[id].cnt7);
+        down(id);
+        return;
+    }
+    
+    if(t[id].lazy) down(id);
+    int tm = (tl + tr) / 2;
+    update(2 * id, tl, tm, l, r); update(2 * id + 1, tm + 1, tr, l, r);
+    t[id].tang = max(t[2 * id].tang + t[2 * id + 1].cnt7, t[2 * id].cnt4 + t[2 * id + 1].tang);
+    t[id].giam = max(t[2 * id].giam + t[2 * id + 1].cnt4, t[2 * id].cnt7 + t[2 * id + 1].giam);
+    t[id].cnt4 = t[2 * id].cnt4 + t[2 * id + 1].cnt4;
+    t[id].cnt7 = t[2 * id].cnt7 + t[2 * id + 1].cnt7;
+}
+ 
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> n >> m;
+    for(int i = 1; i <= n; ++i) {
+        char c; cin >> c;
+        a[i] = c - '0';
+    }
+    build(1, 1, n);
+    while(m--) {
+        string q; cin >> q;
+        if(q == "count") cout << t[1].tang << endl;
+        else {
+            int l, r; cin >> l >> r;
+            update(1, 1, n, l, r);
+        }
+    }
+}
