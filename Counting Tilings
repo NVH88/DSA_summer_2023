@@ -1,0 +1,152 @@
+// dùng forward star, 0.06s
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(n, i) ((n >> i) & 1)
+const int M = 1e9 + 7;
+int n, m, f[1000][1 << 10];
+vector<int> good, fs[1 << 10];
+
+bool check(int x) {
+    int cnt = 0;
+    for(int i = 0; i < n; ++i) {
+        if(bit(x, i)) {
+            if(cnt % 2) return false;
+            cnt = 0;
+        }
+        else ++cnt;
+    }
+    return cnt % 2 == 0;
+}
+
+bool check2(int mask, int premask) {
+    for(int i = 0; i < n; ++i) {
+        if(bit(mask, i) == 1 && bit(premask, i) == 0) return false;
+    }
+    return true;
+}
+
+int calc(int mask, int premask) {
+    int ans = premask;
+    for(int i = 0; i < n; ++i) {
+        if(bit(mask, i) && bit(premask, i)) ans -= (1 << i);
+    }
+    return ans;
+}
+
+void slv() {
+    for(int i = 0; i < 1 << n; ++i) {
+        if(check(i)) good.push_back(i);
+    }
+    for(int i = 0; i < 1 << n; ++i) {
+        for(int j : good) 
+            if(check2(i, j)) fs[i].push_back(j);
+    }
+}
+
+long long back(int i, int mask) { 
+    if(i == 0) {
+        if(mask == 0) return 1;
+        else return 0;
+    }
+    if(f[i][mask] != -1) return f[i][mask];
+    long long ans = 0;
+    for(int premask : fs[mask]) {
+        int tmp = calc(mask, premask);
+        ans += back(i - 1, tmp);
+        ans %= M;
+    }
+    return f[i][mask] = ans;
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> n >> m;
+    for(int i = 0; i < m; ++i) {
+        for(int j = 0; j < 1 << n; ++j) f[i][j] = -1;
+    }
+    slv();
+    long long ans = 0;
+    for(int mask : good) {
+        ans += back(m - 1, mask);
+        ans %= M;
+    }
+    cout << ans;
+}
+
+
+
+
+
+// ko dùng forward star, 0.74s
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(n, i) ((n >> i) & 1)
+const int M = 1e9 + 7;
+int n, m, tt[1 << 10], f[1000][1 << 10];
+
+bool check(int x) {
+    int cnt = 0;
+    for(int i = 0; i < n; ++i) {
+        if(bit(x, i)) {
+            if(cnt % 2) return false;
+            cnt = 0;
+        }
+        else ++cnt;
+    }
+    return cnt % 2 == 0;
+}
+
+void slv() {
+    for(int i = 0; i < 1 << n; ++i) {
+        tt[i] = check(i);
+    }
+}
+
+bool check2(int mask, int premask) {
+    for(int i = 0; i < n; ++i) {
+        if(bit(mask, i) == 1 && bit(premask, i) == 0) return false;
+    }
+    return true;
+}
+
+int calc(int mask, int premask) {
+    int ans = premask;
+    for(int i = 0; i < n; ++i) {
+        if(bit(mask, i) && bit(premask, i)) ans -= (1 << i);
+    }
+    return ans;
+}
+
+long long back(int i, int mask) { 
+    if(i == 0) {
+        if(mask == 0) return 1;
+        else return 0;
+    }
+    if(f[i][mask] != -1) return f[i][mask];
+    long long ans = 0;
+    for(int premask = 0; premask < 1 << n; ++premask) {
+        if(tt[premask] && check2(mask, premask)) {
+            int tmp = calc(mask, premask);
+            ans += back(i - 1, tmp);
+            ans %= M;
+        }
+    }
+    return f[i][mask] = ans;
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    cin >> n >> m;
+    for(int i = 0; i < m; ++i) {
+        for(int j = 0; j < 1 << n; ++j) f[i][j] = -1;
+    }
+    slv();
+    long long ans = 0;
+    for(int mask = 0; mask < 1 << n; ++mask) {
+        if(tt[mask]) {
+            ans += back(m - 1, mask);
+            ans %= M;
+        }
+    }
+    cout << ans;
+}
