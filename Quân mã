@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define bit(n, i) ((n >> i) & 1)
+int n, a[101];
+pair<int, long long> f[100][8][8];
+
+bool check1(int x, int y) {
+    int x0 = bit(x, 0), x2 = bit(x, 2), y0 = bit(y, 0), y2 = bit(y, 2);
+    if((x0 && y2) || (x2 && y0)) return false;
+    return true;
+}
+
+bool check2(int x, int y) {
+    int x0 = bit(x, 0), x1 = bit(x, 1), x2 = bit(x, 2), y0 = bit(y, 0), y1 = bit(y, 1), y2 = bit(y, 2);
+    if((x0 && y1) || (x1 && y0) || (x1 && y2) || (x2 && y1)) return false;
+    return true;
+}
+
+bool check3(int col, int mask) {
+    if(a[col] != -1 && bit(mask, a[col])) return false;
+    return true;
+}
+
+pair<int, long long> back(int col, int mask, int premask) {
+    if(col == 1) f[col][mask][premask] = {__builtin_popcount(mask) + __builtin_popcount(premask), 1};
+
+    if(f[col][mask][premask].first != -1) return f[col][mask][premask];
+
+    pair<int, long long> tmp = {0, 0};
+    for(int prepremask = 0; prepremask < 8; ++prepremask) {
+        if(check1(premask, prepremask) && check2(mask, prepremask) && check3(col - 2, prepremask)) {
+            pair<int, long long> tmp2 = back(col - 1, premask, prepremask);
+            if(tmp.first < tmp2.first) {
+                tmp.first = tmp2.first;
+                tmp.second = tmp2.second;
+            }
+            else if(tmp.first == tmp2.first) tmp.second += tmp2.second;
+        }
+    }
+    return f[col][mask][premask] = {__builtin_popcount(mask) + tmp.first, tmp.second};
+}
+
+int main() {
+    cin >> n;
+    for(int i = 0; i < n; ++i) {
+        int x; cin >> x; a[i] = x - 1;
+    }
+
+    if(n == 1) {
+        if(a[0] == -1) cout << "3 1";
+        else cout << "2 1";
+        return 0;
+    }
+
+    for(int i = 0; i < n; ++i) {
+        for(int j = 0; j < 8; ++j) 
+            for(int k = 0; k < 8; ++k) f[i][j][k] = {-1, 0};
+    }
+
+    for(int i = 0; i < 8; ++i) {
+        for(int j = 0; j < 8; ++j) {
+            if(check1(i, j) && check3(n - 1, i) && check3(n - 2, j)) back(n - 1, i, j);
+        }
+    }
+
+    long long ans = -1, cnt = 0;
+    for(int i = 0; i < 8; ++i) {
+        for(int j = 0; j < 8; ++j) {
+            if(f[n - 1][i][j].first > ans) ans = f[n - 1][i][j].first, cnt = f[n - 1][i][j].second;
+            else if(f[n - 1][i][j].first == ans) cnt += f[n - 1][i][j].second;
+        }
+    }
+    cout << ans << " " << cnt;
+}
