@@ -1,0 +1,70 @@
+Trong giấc mơ, Tèo thấy mình trở thành giám đốc của Công viên Thủ lệ. Để cho công viên thêm phần thú vị, Tèo quyết định đầu tư xây dựng một mê cung dài loằng trong công viên, bao gồm hệ thống các phòng tham quan trên mặt đất, và hệ thống đường đi ngầm dưới lòng đất. Tổng công trình sư cho hệ thống này, không ai khác, chính là người bạn thân của Tèo, kĩ sư Tí.
+
+Có N phòng tham quan nổi trên mặt đất, mỗi phòng mang một số hiệu riêng A[i]. Lối vào bắt đầu ở phòng có số hiệu nhỏ nhất, và lối ra ở phòng có số hiệu lớn nhất. Kĩ sư Tí quyết định thiết kế như sau: sẽ đào đường hầm tham quan 2 chiều giữa 2 phòng mang số hiệu X và Y, nếu chúng có ước chung lớn hơn 1. Lưu lượng người tối đa có thể di chuyển trong đường hầm này bằng UCLN(X,Y) người/1 phút (lưu lượng tối đa chiều đi = lưu lượng tối đa chiều về = UCLN(X,Y)). Khách tham quan một khi bị lạc vào mê cung rồi, sẽ đi liên tục trong hệ thống mê cung này.
+
+Sau khi xem qua bản thiết kế của Tí, Tèo đã yêu cầu Tí tính toán xem số lượng người tối đa có thể tham quan mê cung sao cho hệ thống đường hầm giao thông này không bị tắc nghẽn?
+
+J.png
+
+Input
+
+Dòng đầu tiên là số nguyên dương N (2 <= N <= 1000) là số phòng của hệ thống mê cung.
+
+N dòng tiếp theo, mỗi dòng gồm một số nguyên A[i] là số hiệu của phòng thứ i. Giá trị này nằm trong đoạn [2, 2*10^9].
+
+Output
+
+In ra lưu lượng người lớn nhất có thể vào mê cung/phút. (Lưu lượng tối đa là 10^9 người/phút).
+
+ 
+
+Test 1.
+
+Input:
+
+ 
+
+4
+
+4
+
+6
+
+8
+
+9
+ 
+
+Ouput:
+
+ 
+
+3
+
+Test 2.
+
+Input:
+
+7
+
+25289
+
+17017
+
+2601
+
+325
+
+225
+
+55223
+
+190969
+
+ 
+
+Ouput:
+
+ 
+
+18
