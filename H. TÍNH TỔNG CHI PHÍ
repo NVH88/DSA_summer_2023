@@ -1,0 +1,35 @@
+Cho dãy số nguyên dương A[] có N phần tử và số nguyên dương K.
+
+Trong mỗi bước bạn thực hiện thao tác sau:
+
+Nếu trong mảng còn ít nhất K phần tử thì bạn lấy ra K phần tử nhỏ nhất của dãy. Hoặc sẽ chọn tất cả nếu dãy còn ít hơn K phần tử.
+Thay thế các giá trị vừa lấy ra bằng tổng của chúng.
+Thao tác trên sẽ lặp lại cho đến khi dãy chỉ còn đúng một phần tử.
+
+Giả sử chi phí thực hiện mỗi thao tác hiệu của số lớn nhất và số nhỏ nhất trong các số vừa chọn. Hãy tính tổng chi phí cần thực hiện.
+
+Input
+
+Dòng đầu ghi số N ( 0 < N ≤ 2*105) và số K (1 < K ≤ N).
+
+Dòng tiếp theo ghi N số của dãy A[], các số đều nguyên dương và không quá 109.
+
+Output
+
+Dòng đầu tiên ghi phần tử cuối cùng còn lại.
+
+Dòng thứ hai ghi tổng chi phí.
+
+Ví dụ
+
+Input
+
+Output
+
+4 2
+
+1 2 3 4
+
+10
+
+3
