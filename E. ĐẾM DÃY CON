@@ -1,0 +1,39 @@
+Cho dãy số A có N phần tử và một số nguyên dương M.
+
+Hãy đếm số lượng dãy con (có thể không liên tiếp) của A có trung bình cộng các phần tử đúng bằng M.
+
+Kết quả có thể rất lớn nên hãy chia dư cho 109 + 7
+
+Input
+
+Dòng đầu tiên ghi số bộ test.
+
+Với mỗi bộ test, dòng đầu tiên ghi hai số N và M (1 ≤ N, M ≤ 200).
+
+Dòng thứ hai ghi N số của dãy A, các giá trị nguyên dương và không quá 200.
+
+Output
+
+Với mỗi bộ test, ghi ra kết quả tính được trên một dòng.
+
+Ví dụ
+
+Input
+
+Output
+
+3
+4 6
+5 7 6 7
+5 100
+4 2 5 10 5
+6 100
+77 97 114 105 115 97
+
+ 
+
+5
+
+0
+
+1
