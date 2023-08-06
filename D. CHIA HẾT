@@ -1,0 +1,39 @@
+Cho dãy số {a_1, a_2, …, a_n} và m dãy số {b_1, b_2, …, b_n}.
+
+Với mỗi truy vấn, bạn cần trả lời xem tích a_1*a_2*…*a_n có chia hết cho b_1*b_2*…*b_n hay không?
+
+Input:
+
+Dòng đầu tiên là hai số nguyên n và m (n, m <= 100).
+
+Dòng tiếp theo gồm n số nguyên a[i].
+
+M dòng tiếp, mỗi dòng là một truy vấn gồm n số nguyên b[i]. Các số có giá trị không vượt quá 10^15.
+
+Output: 
+
+Dòng đầu tiên in ra số bộ dãy số b[] thỏa mãn. Dòng thứ 2 in ra lần lượt bộ dãy số thứ i thỏa mãn yêu cầu.
+
+Example:            
+
+Input
+
+Output
+
+3 4
+
+7 10 2011
+
+1 3 5
+
+2 2 7
+
+7 2 5
+
+14 1 2011
+
+ 
+
+2
+
+3 4
