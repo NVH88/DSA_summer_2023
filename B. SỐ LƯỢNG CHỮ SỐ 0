@@ -1,0 +1,28 @@
+Cho dãy số A có N phần tử và số nguyên dương K.
+
+Hãy chọn ra K phần tử trong dãy A sao cho tích các số được chọn có số lượng chữ số 0 ở cuối là nhiều nhất có thể.
+
+Input
+
+Dòng đầu ghi 2 số N và K (1 ≤ K ≤ N ≤ 150).
+
+Dòng thứ 2 ghi N số của dãy A, các số đều nguyên dương và không quá 1018.
+
+Output
+
+Ghi ra số lượng chữ số 0 nhiều nhất có thể của tích K phần tử trong dãy A.
+
+Ví dụ
+
+Input
+
+Output
+
+3 2
+250 625 40
+
+ 
+
+4
+
+ 
