@@ -1,0 +1,49 @@
+Cho đồ thị G có N đỉnh và đúng N-1 cạnh có hướng.
+
+Hãy tính độ dài đường đi dài nhất giữa hai đỉnh bất kỳ trên đồ thị.
+
+Độ dài đường đi giữa hai đỉnh được tính bằng số cạnh đi qua trên đường đi đó.
+
+Input:
+
+Dòng đầu tiên là số nguyên dương N (N ≤ 100 000).
+
+N-1 dòng tiếp, mỗi dòng gồm 2 số nguyên u, v mô tả cạnh nối uàv.
+
+Output: 
+
+Hãy in ra đáp án tìm được trên một dòng.
+
+Ví dụ:
+
+Input
+
+Output
+
+5
+
+1 2
+
+2 3
+
+2 4
+
+1 5
+
+3
+
+7
+
+1 2
+
+2 3
+
+3 4
+
+4 5
+
+4 6
+
+6 7
+
+5
