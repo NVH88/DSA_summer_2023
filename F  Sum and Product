@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    int t; cin >> t;
+    while(t--) {
+        int n; cin >> n;
+        map<long long, long long> mp;
+        for(int i = 0; i < n; ++i) {
+            long long x; cin >> x; ++mp[x];
+        }
+        int q; cin >> q;
+        while(q--) {
+            long long x, y; cin >> x >> y;
+            long long sqrtDelta = sqrt(x * x - 4 * y);
+            if(sqrtDelta < 0 || sqrtDelta * sqrtDelta != x * x - 4 * y || (x + sqrtDelta) % 2) {
+                cout << 0 << " ";
+            }
+            else if(sqrtDelta == 0) {
+                int a = x / 2;
+                cout << mp[a] * (mp[a] - 1) / 2 << " ";
+            }
+            else {
+                int a1 = (x + sqrtDelta) / 2, a2 = (x - sqrtDelta) / 2;
+                if(a1 + a2 == x) cout << (mp[a1] * mp[x - a1] + mp[a2] * mp[x - a2]) / 2 << " ";
+                else cout << mp[a1] * mp[x - a1] + mp[a2] * mp[x - a2] << " ";
+            }
+        }
+        cout << endl;
+    }
+}
