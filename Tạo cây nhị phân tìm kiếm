@@ -1,0 +1,78 @@
+// code cây nhị phân tìm kiếm
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node{
+    int val;
+    Node *left, *right;
+    Node(int x) {
+        val = x; left = right = nullptr;
+    }
+};
+
+//duyệt preorder
+void pre(Node *root) {
+    if(root == nullptr) return;
+    cout << root->val << " ";
+    pre(root->left); pre(root->right);
+}
+
+//thêm 1 node vào cây
+
+Node *insert(Node *root, int x) {
+    if(root == nullptr) root = new Node(x);
+    else if(root->val == x) return root;
+    else if(root->val > x) root->left = insert(root->left, x);
+    else root->right = insert(root->right, x);
+    return root;
+}
+
+// xóa 1 node khỏi cây
+
+Node *Delete(Node *root, int x) {
+    if(root == nullptr) return root;
+    if(root->val > x) root->left = Delete(root->left, x);
+    else if(root->val < x) root->right = Delete(root->right, x);
+    else { //gặp node cần xóa
+        if(root->right == nullptr && root->left == nullptr) { //node lá
+            delete root;
+        }
+
+        else if(root->left == nullptr) { //chỉ có cây con bên phải
+            Node *tmp = root->right;
+            delete root;
+            return tmp;
+        }
+        else if(root->right == nullptr) { //chỉ có cây con bên trái
+            Node *tmp = root->left;
+            delete root;
+            return tmp;
+        }
+
+        else { //có cây con ở 2 bên, lấy node bên phải có giá trị nhỏ nhất thay node gốc
+            Node *tmp = root->right;
+            while(tmp->left != nullptr) tmp = tmp->left;
+            root->val = tmp->val;
+            root->right = Delete(root->right, tmp->val);
+            delete tmp;
+        }
+    }
+    return root;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+
+    int n; cin >> n;
+    Node *root = nullptr;
+    for(int i = 0; i < n; ++i) {
+        int x; cin >> x;
+        root = insert(root, x);
+    }
+    pre(root);
+}
