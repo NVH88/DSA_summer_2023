@@ -55,7 +55,6 @@ Node *Delete(Node *root, int x) {
             while(tmp->left != nullptr) tmp = tmp->left;
             root->val = tmp->val;
             root->right = Delete(root->right, tmp->val);
-            delete tmp;
         }
     }
     return root;
