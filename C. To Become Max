@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int a[1001], n, k, Max;
+
+int bs() {
+    int l = Max, r = Max + k, ans = Max;
+    while(l <= r) {
+        int m = (l + r) / 2, ok = 0;
+        for(int i = 0; i < n - 1; ++i) {
+            int tmp = m, cnt = 0;
+            for(int j = i; j < n; ++j) {
+                if(j == n - 1 && a[j] < tmp) {
+                    cnt = INT_MAX; break;
+                }
+                if(a[j] >= tmp) {
+                    break;
+                }
+                cnt += tmp - a[j]; --tmp;
+                if(cnt > k) break;
+            }
+            if(cnt <= k) {
+                ok = 1; ans = m; break;
+            }
+        }
+        if(ok) l = m + 1;
+        else r = m - 1;
+    }
+    return ans;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    int t; cin >> t;
+    while(t--) {
+        cin >> n >> k;
+        Max = 0;
+        for(int i = 0; i < n; ++i) cin >> a[i], Max = max(a[i], Max);
+        cout << bs() << endl;
+    }
+}
