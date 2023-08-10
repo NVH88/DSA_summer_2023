@@ -1,0 +1,8 @@
+Bài toán kiểu dãy số có tổng = s và 3 bài coin:
+
+TH1: Vòng For n ở ngoài:
+-Nếu for s xuôi thì các số có thể bị lặp, nhưng không tạo ra các hoán vị
+-Nếu for s theo chiều ngược thì các số sẽ không bị lặp
+
+TH2: Vòng For s ở ngoài:
+Các số sẽ có thể lặp lại và sẽ tạo ra các hoán vị
