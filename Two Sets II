@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int M = 1e9 + 7;
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    int n; cin >> n;
+    int s = n * (n + 1) / 2;
+    if(s % 2) {
+        cout << 0; return 0;
+    }
+
+    s /= 2;
+    long long f[s + 1] = {0}; f[0] = 1;
+    for(int i = 1; i <= n; ++i) {
+        for(int j = s; j >= i; --j) 
+            if(f[j - i]) f[j] = ((f[j] % M) + (f[j - i] % M)) % M;
+    }
+    cout << (f[s] * 500000004) % M;
+}
