@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int n, a[5005];
+long long f[5005][5005], sum[5005];
+
+long long calc(int l, int r) {
+    if(f[l][r] != LLONG_MIN) return f[l][r];
+    if(l == r) return a[l];
+
+    return f[l][r] = max(a[l] + sum[r] - sum[l] - calc(l + 1, r), a[r] + sum[r - 1] - sum[l - 1] - calc(l, r - 1));
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+   
+    cin >> n;
+    for(int i = 1; i <= n; ++i) {
+        cin >> a[i]; sum[i] = sum[i - 1] + a[i];
+    }
+    for(int i = 1; i <= n; ++i) {
+        for(int j = 1; j <= n; ++j) f[i][j] = LLONG_MIN;
+    }
+    cout << calc(1, n);
+}
