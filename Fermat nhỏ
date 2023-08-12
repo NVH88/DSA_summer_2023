@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int M = 1e9 + 7; // modulo chỉ có thể là số nguyên tố
+int a;
+
+long long binPow(int m) {
+    if(m == 0) return 1;
+
+    long long b = binPow(m / 2);
+    long long c = ((b % M) * (b % M)) % M;
+    if(m % 2) return (c * (a % M)) % M;
+    return c;
+}
+
+int main() {
+    cin >> a;
+    cout << binPow(M - 2);
+}
