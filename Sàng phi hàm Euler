@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int maxN = 1e7;
+
+int phi[maxN];
+
+int main() {
+    for(int i = 2; i < maxN; ++i) phi[i] = i;
+    for(int i = 2; i < maxN; ++i) {
+        for(int j = i; j < maxN; j += i) phi[j] -= phi[j] / i;
+    }
+
+    for(int i = 2; i <= 10; ++i) cout << phi[i] << " ";
+}
