@@ -1,0 +1,50 @@
+/* Giải thích:
+  coi ma trận A đề cho là 1 ma trận kề của 1 đồ thị, với a[i][j] = 1 thể hiện cố 1 đường đi từ i đến j
+  ma trận A mũ k: với a[i][j] = 0 thể hiện không có đường đi có độ dài = k từ i đến j
+                  với a[i][j] = x != 0 thể hiện có x đường đi có độ dài từ i đến j
+
+  Vì vậy, đáp án chỉ tồn tại khi đồ thị không có chu trình, bài toán trở về tìm đường đi dài nhất trong đồ thị, với đường đi dài nhất = k thì cần lũy thừa A k + 1
+lần để ma trận còn full số 0.
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, ok, color[500001], dp[500001];;
+vector<int> adj[500001];
+
+void init() {
+    cin >> n >> m;
+    for(int i = 0; i < m; ++i) {
+        int x, y; cin >> x >> y; adj[x].push_back(y);
+    }
+}
+
+int dfs(int u) {
+    if(ok) return 0;
+    color[u] = 1;
+    if(adj[u].size() == 0) {
+        color[u] = 2;
+        return dp[u] = 0;
+    }
+    int m = 0;
+    for(int i : adj[u]) {
+        if(color[i] == 1) ok = 1; 
+        if(dp[i] == 0) dfs(i);
+        m = max(m, dp[i]);
+    }
+    color[u] = 2;
+    return dp[u] = m + 1;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+   
+    init();
+    for(int i = 1; i <= n; ++i) dfs(i);
+    if(ok) cout << -1;
+    else cout << *max_element(dp + 1, dp + n + 1) + 1;
+}
