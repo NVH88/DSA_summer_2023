@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define bit(n, i) ((n >> i) & 1)
+
+int n, root, h[1005], p[15][1005];
+vector<int> ke[1005];
+bool r[1005];
+
+void init() {
+	memset(r, true, sizeof(r));
+	cin >> n;
+	for(int i = 1; i <= n; ++i) ke[i].clear();
+	for(int i = 1; i <= n; ++i) {
+		int c; cin >> c;
+		for(int j = 0; j < c; ++j) {
+			int x; cin >> x;
+			ke[i].push_back(x);
+			ke[x].push_back(i);
+			p[0][x] = i;
+			r[x] = false;
+		}
+	}
+	for(int i = 1; i <= n; ++i) if(r[i]) {
+		root = i; break;
+	}
+	h[root] = 0;
+}
+
+void DFS(int u) {
+	for(int i : ke[u]) if(i != p[0][u]) {
+		h[i] = h[u] + 1;
+		p[0][i] = u;
+		for(int j = 1; j <= 10; ++j) {
+			p[j][i] = p[j - 1][p[j - 1][i]];
+		}
+		DFS(i);
+	}
+}
+
+int LCA(int u, int v) {
+	if(h[v] > h[u]) swap(u, v);
+	int d = h[u] - h[v];
+	for(int i = 0; i <= 10; ++i) {
+		if(bit(d, i)) u = p[i][u];
+	}
+	if(u == v) return u;
+	
+	for(int i = 10; i >= 0; --i) {
+		if(p[i][u] != p[i][v]) {
+			u = p[i][u];
+			v = p[i][v];
+		}
+	}
+	
+	return p[0][u];
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	int t; cin >> t;
+	for(int i = 1; i <= t; ++i) {
+		init();
+		cout << "Case " << i << ":" << endl;
+		DFS(root);
+		int q; cin >> q;
+		while(q--) {
+			int u, v; cin >> u >> v;
+			cout << LCA(u, v) << endl;
+		}
+	}
+}
