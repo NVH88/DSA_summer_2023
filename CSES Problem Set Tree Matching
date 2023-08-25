@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 200005;
+
+int n, par[N], used[N];
+vector<int> ke[N];
+
+void init() {
+	cin >> n;
+	for(int i = 1; i < n; ++i) {
+		int x, y; cin >> x >> y;
+		ke[x].push_back(y); ke[y].push_back(x);
+	}
+	par[1] = -1;
+}
+
+void DFS1(int u) {
+	for(int v : ke[u]) if(par[u] != v) {
+		par[v] = u;
+		DFS1(v);
+	}
+}
+
+void DFS2(int u) {
+	for(int v : ke[u]) {
+		if(v != par[u]) {
+			DFS2(v);
+			if(!used[v] && !used[u]) {
+				used[v] = 1; used[u] = 1;
+			}
+		}
+	}
+	if(par[u] != -1 && !used[u] && !used[par[u]]) {
+		used[u] = 1; used[par[u]] = 1;
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	init();
+	DFS1(1);
+	DFS2(1);
+	int cnt = 0;
+	for(int i = 1; i <= n; ++i) if(used[i]) ++cnt;
+	cout << cnt / 2;
+}
