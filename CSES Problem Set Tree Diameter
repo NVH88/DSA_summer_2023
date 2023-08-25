@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 200005;
+
+int n, X[N];
+bool used[N];
+vector<int> ke[N];
+
+void init() {
+	cin >> n;
+	for(int i = 1; i < n; ++i) {
+		int x, y; cin >> x >> y;
+		ke[x].push_back(y); ke[y].push_back(x);
+	}
+}
+
+int DFS(int u) {
+	used[u] = true;
+	for(int v : ke[u]) if(!used[v]) {
+		X[v] = X[u] + 1;
+		DFS(v);
+	}
+	return X[u];
+}
+
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	init();
+	DFS(1);
+	int leaf, tmp = 0;
+	for(int i = 1; i <= n; ++i) {
+		if(X[i] > tmp) leaf = i, tmp = X[i];
+	}
+	memset(used, false, sizeof(used));
+	memset(X, 0, sizeof(X));
+	DFS(leaf);
+	cout << *max_element(X + 1, X + n + 1);
+}
