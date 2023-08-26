@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 200001;
+
+vector<int> ke[N];
+int n, max1[N], max2[N], c[N];
+
+void init() {
+    cin >> n;
+    for (int i = 1; i < n; ++i) {
+        int u, v; cin >> u >> v;
+        ke[u].push_back(v);
+        ke[v].push_back(u);
+    }
+}
+
+void DFS1(int u, int p) {
+    max1[u] = max2[u] = 0;
+    for (int v : ke[u]) {
+        if (v == p) continue;
+        DFS1(v, u);
+        if (max1[u] < max1[v] + 1) {
+            max2[u] = max1[u];
+            max1[u] = max1[v] + 1;
+            c[u] = v;
+        } else max2[u] = max(max2[u], max1[v] + 1);
+    }
+}
+
+void DFS2(int u, int p) {
+    for (int v : ke[u]) {
+        if (v == p) continue;
+        if (c[u] == v) {
+            if(max1[v] < max2[u] + 1) {
+                max2[v] = max1[v];
+                max1[v] = max2[u] + 1;
+                c[v] = u;
+            } else max2[v] = max(max2[v], max2[u] + 1);
+        } else {
+            max2[v] = max1[v];
+            max1[v] = max1[u] + 1;
+            c[v] = u;
+        }
+        DFS2(v, u);
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    init();
+    DFS1(1, -1);
+    DFS2(1, -1);
+    for (int i = 1; i <= n; ++i) {
+        cout << max1[i] << " ";
+    }
+}
