@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int N = 200001;
+
+vector<int> ke[N];
+ll n, dp[N], f[N];
+
+void init() {
+    cin >> n;
+    for (int i = 1; i < n; ++i) {
+        int u, v; cin >> u >> v;
+        ke[u].push_back(v);
+        ke[v].push_back(u);
+    }
+}
+
+void DFS1(int u, int p, int length) {
+    f[1] += length;
+    dp[u] = 1;
+    for (int v : ke[u]) if (v != p) {
+        DFS1(v, u, length + 1);
+        dp[u] += dp[v];
+    }
+}
+
+void DFS2(int u, int p) {
+    for (int v : ke[u]) if (v != p) {
+        f[v] = f[u] + n - 2 * dp[v];
+        DFS2(v, u);
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    init();
+    DFS1(1, -1, 0);
+    DFS2(1, -1);
+    for (int i = 1; i <= n; ++i) {
+        cout << f[i] << " ";
+    }
+}
