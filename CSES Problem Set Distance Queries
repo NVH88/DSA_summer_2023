@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 200001;
+#define bit(n, i) ((n >> i) & 1)
+
+int n, q, d[N], par[N][20];
+vector<int> ke[N];
+
+void init() {
+    cin >> n >> q;
+    for (int i = 1; i < n; ++i) {
+        int u, v; cin >> u >> v;
+        ke[u].push_back(v);
+        ke[v].push_back(u);
+    }
+    d[1] = 0;
+}
+
+void DFS(int u, int p) {
+    for (int v : ke[u]) if (v != p) {
+        d[v] = d[u] + 1;
+        par[v][0] = u;
+        DFS(v, u);
+    }
+}
+
+void qhd() {
+    for (int i = 1; i < 20; ++i) {
+        for (int u = 2; u <= n; ++u) {
+            par[u][i] = par[par[u][i - 1]][i - 1];
+        }
+    }
+}
+
+int LCA(int u, int v) {
+    if (d[v] > d[u]) swap(u, v);
+    int dis = d[u] - d[v];
+    for (int i = 0; i < 20; ++i) if (bit(dis, i)) {
+        u = par[u][i];
+    }
+    if (u == v) return u;
+
+    for (int i = 19; i >= 0; --i) if (par[u][i] != par[v][i]) {
+        u = par[u][i];
+        v = par[v][i];
+    }
+    return par[u][0];
+}
+
+int getDis(int u, int v) {
+    return d[u] + d[v] - 2 * d[LCA(u, v)];
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+   
+    init();
+    DFS(1, -1);
+    qhd();
+    while (q--) {
+        int u, v; cin >> u >> v;
+        cout << getDis(u, v) << endl;
+    }
+}
