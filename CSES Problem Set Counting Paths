@@ -1,0 +1,77 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 200001;
+#define bit(n, i) ((n >> i) & 1)
+
+int n, m, sub[N], h[N], par[N][20];
+vector<int> ke[N];
+
+void init() {
+    cin >> n >> m;
+    for (int i = 1; i < n; ++i) {
+        int u, v; cin >> u >> v;
+        ke[u].push_back(v);
+        ke[v].push_back(u);
+    }
+}
+
+void DFS(int u, int p) {
+    for (int v : ke[u]) if (v != p) {
+        h[v] = h[u] + 1;
+        par[v][0] = u;
+        DFS(v, u);
+    }
+}
+
+void qhd() {
+    for (int i = 1; i < 20; ++i) {
+        for (int u = 2; u <= n; ++u) {
+            par[u][i] = par[par[u][i - 1]][i - 1];
+        }
+    }
+}
+
+int LCA(int u, int v) {
+    if (h[u] < h[v]) swap(u, v);
+    int d = h[u] - h[v];
+    for (int i = 0; i < 20; ++i) if (bit(d, i)) {
+        u = par[u][i];
+    }
+    if(v == u) return u;
+
+    for (int i = 19; i >= 0; --i) if (par[u][i] != par[v][i]) {
+        u = par[u][i];
+        v = par[v][i];
+    }
+    return par[u][0];
+}
+
+void update(int u, int p) {
+    for (int v : ke[u]) if (v != p) {
+        update(v, u);
+        sub[u] += sub[v];
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+   
+    init();
+    DFS(1, -1);
+    qhd();
+    while (m--) {
+        int u, v; cin >> u >> v;
+        ++sub[u]; ++sub[v];
+        int c = LCA(u, v);
+        --sub[c];
+        if(c != 1) --sub[par[c][0]];
+    }
+    update(1, -1);
+    for (int i = 1; i <= n; ++i) {
+        cout << sub[i] << " ";
+    }
+}
