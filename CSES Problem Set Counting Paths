@@ -5,6 +5,7 @@ const int N = 200001;
 
 int n, m, sub[N], h[N], par[N][20];
 vector<int> ke[N];
+//sub[i]: số đường đi qua i - tổng số đường đi qua các node con của i
 
 void init() {
     cin >> n >> m;
